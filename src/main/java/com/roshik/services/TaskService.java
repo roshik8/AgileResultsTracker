@@ -3,9 +3,9 @@ package com.roshik.services;
 import com.roshik.domains.Task;
 import com.roshik.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class TaskService {
     @Autowired
     TaskRepository repository;

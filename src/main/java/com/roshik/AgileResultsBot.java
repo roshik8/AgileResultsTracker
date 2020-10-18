@@ -14,7 +14,7 @@ public class AgileResultsBot extends TelegramWebhookBot {
     private String botToken;
     private TelegramFacade telegramFacade;
 
-    public AgileResultsBot(DefaultBotOptions botOptions, TelegramFacade telegramFacade){
+    public AgileResultsBot(DefaultBotOptions botOptions,TelegramFacade telegramFacade){
         super(botOptions);
         this.telegramFacade = telegramFacade;
     }
@@ -22,7 +22,6 @@ public class AgileResultsBot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         final BotApiMethod<?> replyMessageToUser = telegramFacade.handleUpdate(update);
-
         return replyMessageToUser;
     }
 
