@@ -1,7 +1,6 @@
-package com.roshik.command;
+package com.roshik.command.watch;
 
-import com.roshik.command.create.CreateTaskTitleCommand;
-import com.roshik.command.watch.WatchTaskCommand;
+import com.roshik.command.*;
 import com.roshik.services.KeyBoardService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
@@ -14,23 +13,26 @@ import java.util.Map;
 @ComponentScan
 @Service
 @Scope(value = "prototype")
-public class MainMenuCommand implements ICommand, ICommandValidator, IHasNextCommand {
-
+public class WatchTaskCommand implements ICommand, ICommandValidator, IHasNextCommand {
     private final KeyBoardService keyBoardService;
+    //private final AgileResultsBot agileResultsBot;
+    private Long currentChatId;
     private final Map<String, Class<?>> menu = Map.of(
-            "Создать задачу", CreateTaskTitleCommand.class,
-            "Посмотреть задачи", WatchTaskCommand.class
+            "Свои задачи", GetSelfTask.class,
+            "Чужие задачи", GetPermissionTask.class
     );
     private String NextCommandHandlerName;
 
-    public MainMenuCommand(KeyBoardService keyBoardService) {
+    public WatchTaskCommand(KeyBoardService keyBoardService) {
         this.keyBoardService = keyBoardService;
+        //this.agileResultsBot = agileResultsBot;
     }
 
     @Override
     public SendMessage generateRequest(Long chatId) {
+        currentChatId = chatId;
         ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(menu.keySet());
-        var message = keyBoardService.createMessage(chatId, "Выбери пункт меню");
+        var message = keyBoardService.createMessage(chatId, "Какие задачи хочешь посмотреть?");
         message.setReplyMarkup(keyboard);
         return message;
     }
@@ -42,19 +44,11 @@ public class MainMenuCommand implements ICommand, ICommandValidator, IHasNextCom
 
     @Override
     public ValidationResult ValidateMessage(String message) {
-        var result = new ValidationResult();
-        if (!menu.containsKey(message)) {
-            result.IsSuccess = false;
-            result.ValidationError = "Такой команды нет";
-        } else {
-            result.IsSuccess = true;
-        }
-        return result;
+        return null;
     }
 
     @Override
     public Class<?> getNextCommandName() {
-
         return menu.get(NextCommandHandlerName);
     }
 }

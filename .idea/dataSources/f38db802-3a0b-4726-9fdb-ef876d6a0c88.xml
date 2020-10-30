@@ -531,6 +531,8 @@
     <column id="155" parent="141" name="name">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <Collation>utf8_general_ci</Collation>
     </column>
     <column id="156" parent="141" name="status">
       <Position>3</Position>

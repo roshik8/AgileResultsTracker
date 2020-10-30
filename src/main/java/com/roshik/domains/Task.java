@@ -1,7 +1,12 @@
 package com.roshik.domains;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "tasks")
 public class Task {
@@ -16,37 +21,11 @@ public class Task {
     @JoinColumn(name = "period_id", nullable = false)
     private Period period;
 
+    private Long user_id;
+
 
     public Task(){
 
-    }
-
-    public int getId() {
-        return Id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public TaskStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(TaskStatus status) {
-        this.status = status;
-    }
-
-    public Period getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(Period period) {
-        this.period = period;
     }
 }
 

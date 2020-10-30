@@ -1,14 +1,12 @@
 package com.roshik.config;
 
-import com.roshik.AgileResultsBot;
+import com.roshik.bot.AgileResultsBot;
 import com.roshik.bot.TelegramFacade;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.telegram.telegrambots.ApiContext;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
