@@ -21,13 +21,13 @@ public class StateManager {
 
     private HashMap<Long, ICommand> userCommandCache = new HashMap<>();
 
-    public SendMessage handleUpdate(long chatId, String message) {
+    public SendMessage handleUpdate(Long chatId, Integer messageId, String message) {
         ICommand nextCommand = null;
 
         if (userCommandCache.containsKey(chatId)) {
             var currentCommand = userCommandCache.get(chatId);
             if (currentCommand instanceof ICommandValidator) {
-                var validationResult = ((ICommandValidator) currentCommand).ValidateMessage(message);
+                var validationResult = ((ICommandValidator) currentCommand).validateMessage(message,chatId);
                 if (!validationResult.IsSuccess) {
                     SendMessage sendMessage = new SendMessage()
                             .setChatId(chatId)
@@ -37,6 +37,10 @@ public class StateManager {
             }
 
             currentCommand.handleResponse(message);
+
+            if(currentCommand instanceof IHasCallbackAnswer){
+                ((IHasCallbackAnswer) currentCommand).editCallback(messageId);
+            }
 
             if (currentCommand instanceof IHasNextCommand) {
                 var nextCommandName = ((IHasNextCommand) currentCommand).getNextCommandName();

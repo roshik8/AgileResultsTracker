@@ -9,11 +9,12 @@ public class Permission {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int Id;
 
-    private int id_owner;
-    private int permission_owner;
-    private int data_owner;
+    private Long id_owner;
+    private Long permission_owner;
 
-    private String permission_type;
+    @ManyToOne
+    @JoinColumn(name = "data_owner",nullable = false)
+    private Task task;
 
     public Permission(){
 
@@ -23,35 +24,27 @@ public class Permission {
         return Id;
     }
 
-    public int getId_owner() {
+    public Long getId_owner() {
         return id_owner;
     }
 
-    public void setId_owner(int id_owner) {
+    public void setId_owner(Long id_owner) {
         this.id_owner = id_owner;
     }
 
-    public int getPermission_owner() {
+    public Long getPermission_owner() {
         return permission_owner;
     }
 
-    public void setPermission_owner(int permission_owner) {
+    public void setPermission_owner(Long permission_owner) {
         this.permission_owner = permission_owner;
     }
 
-    public int getData_owner() {
-        return data_owner;
+    public Task getTask() {
+        return task;
     }
 
-    public void setData_owner(int data_owner) {
-        this.data_owner = data_owner;
-    }
-
-    public String getPermission_type() {
-        return permission_type;
-    }
-
-    public void setPermission_type(String permission_type) {
-        this.permission_type = permission_type;
+    public void setTask(Task task) {
+        this.task = task;
     }
 }

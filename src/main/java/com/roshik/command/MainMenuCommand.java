@@ -1,7 +1,7 @@
 package com.roshik.command;
 
 import com.roshik.command.create.CreateTaskTitleCommand;
-import com.roshik.command.watch.WatchTaskCommand;
+import com.roshik.command.watch.WatchPermissionCommand;
 import com.roshik.services.KeyBoardService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
@@ -19,7 +19,7 @@ public class MainMenuCommand implements ICommand, ICommandValidator, IHasNextCom
     private final KeyBoardService keyBoardService;
     private final Map<String, Class<?>> menu = Map.of(
             "Создать задачу", CreateTaskTitleCommand.class,
-            "Посмотреть задачи", WatchTaskCommand.class
+            "Посмотреть задачи", WatchPermissionCommand.class
     );
     private String NextCommandHandlerName;
 
@@ -41,7 +41,7 @@ public class MainMenuCommand implements ICommand, ICommandValidator, IHasNextCom
     }
 
     @Override
-    public ValidationResult ValidateMessage(String message) {
+    public ValidationResult validateMessage(String message, Long chatId) {
         var result = new ValidationResult();
         if (!menu.containsKey(message)) {
             result.IsSuccess = false;

@@ -8,6 +8,7 @@ import com.roshik.services.TaskService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
@@ -71,12 +72,17 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
     }
 
     @Override
-    public ValidationResult ValidateMessage(String message) {
+    public ValidationResult validateMessage(String message, Long chatId) {
         var result = new ValidationResult();
-        if (message == null || message.length() < 1) {
+        if (StringUtils.isEmpty(message)) {
             result.IsSuccess = false;
-            result.ValidationError = "Название не может быть пустым";
-        } else {
+            result.ValidationError = "Период не может быть пустым";
+        }
+        else if (!menu.containsKey(message)){
+            result.IsSuccess = false;
+            result.ValidationError = "Выбери период из списка";
+        }
+        else {
             result.IsSuccess = true;
         }
         return result;

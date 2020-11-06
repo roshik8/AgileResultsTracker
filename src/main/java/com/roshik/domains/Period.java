@@ -1,6 +1,8 @@
 package com.roshik.domains;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -36,6 +38,10 @@ public class Period {
 
     public Date getEnd_date() {
         return end_date;
+    }
+    public String getStringEnd_date() {
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        return df.format(end_date);
     }
 
     public void setEnd_date(Date end_date) {

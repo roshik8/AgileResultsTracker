@@ -38,4 +38,11 @@ public class KeyBoardService {
         sendMessage.setText(textMessage);
         return sendMessage;
     }
+
+    public SendMessage createMessage(final long chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(chatId);
+        return sendMessage;
+    }
 }

@@ -1,13 +1,11 @@
 package com.roshik.bot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.roshik.command.StateManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.api.objects.Contact;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -23,8 +21,8 @@ public class TelegramFacade {
 
     public BotApiMethod<?> handleUpdate(Update update) {
         Message message;
-
         String text;
+
         if (update.hasCallbackQuery()) {
             message = update.getCallbackQuery().getMessage();
             text = update.getCallbackQuery().getData();
@@ -37,31 +35,17 @@ public class TelegramFacade {
         }
 
         Long chatId = message.getChatId();
+        Integer messageId = message.getMessageId();
         if (text == null) {
             Contact contact = message.getContact();
             if (contact != null) {
-                ObjectMapper mapper = new ObjectMapper();
-                try {
-                    text = mapper.writeValueAsString(contact);
-                } catch (Exception ex) {
-                    // todo обработать непонятные сообщения
-                }
+                Gson gson = new Gson();
+                text = gson.toJson(contact);
             }
         }
+
         try {
-
-            var outMessage = stateManager.handleUpdate(chatId, text);
-
-            if (update.hasCallbackQuery()) {
-                var t = new EditMessageReplyMarkup();
-                t.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
-                t.setChatId(update.getCallbackQuery().getFrom().getId().toString());
-                //AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
-                //answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
-                //answerCallbackQuery.setShowAlert(true);
-                //answerCallbackQuery.setText("лох");
-                return t;
-            }
+            var outMessage = stateManager.handleUpdate(chatId, messageId, text);
             return outMessage;
         } catch (Exception e) {
             //todo удалить перед продом

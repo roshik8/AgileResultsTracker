@@ -23,7 +23,7 @@ public class BotConfig {
     public AgileResultsBot agileResultsBot(TelegramFacade telegramFacade) {
         DefaultBotOptions options = ApiContext.getInstance(DefaultBotOptions.class);
         AgileResultsBot agileResultsBot = new AgileResultsBot(options,telegramFacade);
-        setBotUserName(botUserName);
+        agileResultsBot.setBotUserName(botUserName);
         agileResultsBot.setBotToken(botToken);
         agileResultsBot.setWebHookPath(webHookPath);
         return agileResultsBot;
