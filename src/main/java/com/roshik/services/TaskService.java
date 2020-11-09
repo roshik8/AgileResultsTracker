@@ -1,6 +1,7 @@
 package com.roshik.services;
 
 import com.roshik.domains.Task;
+import com.roshik.domains.TaskStatus;
 import com.roshik.repositories.PeriodRepository;
 import com.roshik.repositories.PermissionRepository;
 import com.roshik.repositories.TaskRepository;
@@ -60,6 +61,17 @@ public class TaskService {
         return repository.findById(Id).orElse(null);
     }
 
+
+
+    public List<Task> updateExpiredTask(){
+        var tasks = repository.findByExpiredPeriod();
+
+        for(var task: tasks){
+            task.setStatus(TaskStatus.Expired);
+            repository.save(task);
+        }
+        return tasks;
+    }
 
 }
 

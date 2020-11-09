@@ -12,9 +12,7 @@ import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @ComponentScan
 @Service
@@ -41,7 +39,7 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
     @Override
     public SendMessage generateRequest(Long chatId) {
         currentChatId = chatId;
-        ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(menu.keySet());
+        ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(new TreeSet<>(menu.keySet()));
         var message = keyBoardService.createMessage(chatId, "Выбери период");
         message.setReplyMarkup(keyboard);
         return message;

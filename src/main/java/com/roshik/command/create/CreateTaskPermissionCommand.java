@@ -10,8 +10,11 @@ import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 
 @ComponentScan
@@ -36,8 +39,10 @@ public class CreateTaskPermissionCommand implements ICommand, IHasNextCommand, I
     @Override
     public SendMessage generateRequest(Long chatId) {
         currentChatId = chatId;
-        agileResultsBot.sendMessage(chatId,"Задача создана");
-        InlineKeyboardMarkup keyboard = inlineKeyBoardService.getKeyboard(buttons);
+        SendMessage sendMessage = new SendMessage().setChatId(currentChatId).setText("Задача создана")
+                .setReplyMarkup(new ReplyKeyboardRemove());
+        agileResultsBot.sendNewMessage(sendMessage);
+        InlineKeyboardMarkup keyboard = inlineKeyBoardService.getKeyboard(new TreeMap<>(buttons));
         var message = inlineKeyBoardService.createMessage(chatId, "Дать кому-то права на просмотр?");
         message.setReplyMarkup(keyboard);
         return message;

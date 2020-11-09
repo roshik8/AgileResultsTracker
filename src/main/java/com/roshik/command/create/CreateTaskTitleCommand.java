@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 @ComponentScan
 @Service
@@ -26,7 +29,8 @@ public class CreateTaskTitleCommand implements ICommand, ICommandValidator, IHas
         currentChatId = chatId;
         SendMessage sendMessage = new SendMessage()
                 .setChatId(currentChatId)
-                .setText("Введи название задачи");
+                .setText("Введи название задачи")
+                .setReplyMarkup(new ReplyKeyboardRemove());
         return sendMessage;
     }
 

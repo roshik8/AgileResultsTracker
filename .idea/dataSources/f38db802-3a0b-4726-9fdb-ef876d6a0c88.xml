@@ -948,13 +948,13 @@ SELECT|sys.sys_config:null
       <Position>3</Position>
       <DataType>bigint|0s</DataType>
     </column>
-    <column id="293" parent="284" name="data_owner">
+    <column id="293" parent="284" name="task_id">
       <Position>4</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="294" parent="284" name="FK3mgimxk2najdp5wh4wal2by9s">
-      <ColNames>data_owner</ColNames>
+    <index id="294" parent="284" name="FK7cla9mktbk3orgapmr8l58y1u">
+      <ColNames>task_id</ColNames>
       <Type>btree</Type>
     </index>
     <key id="295" parent="284" name="PRIMARY">

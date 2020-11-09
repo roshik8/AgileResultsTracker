@@ -109,13 +109,6 @@ public class EditTaskCommand implements ICommand, ICommandValidator, IHasNextCom
         var editMessage = new EditMessageReplyMarkup();
         editMessage.setMessageId(messageId);
         editMessage.setChatId(currentChatId);
-        var replyMarkup = (InlineKeyboardMarkup) storage.getTempObject(currentChatId);
-        for (var row : replyMarkup.getKeyboard()) {
-            row.removeIf(button -> button.getCallbackData().equals(currentMessage));
-        }
-
-        editMessage.setReplyMarkup(replyMarkup);
         agileResultsBot.sendNewMessage(editMessage);
-
     }
 }

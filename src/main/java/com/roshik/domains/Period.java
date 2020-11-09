@@ -16,9 +16,8 @@ public class Period {
     private Date start_date;
     private Date end_date;
 
-    @OneToMany(mappedBy = "period", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<Task> tasks;
+    @OneToOne(mappedBy = "period")
+    private Task task;
 
     public Period(){
 
@@ -48,11 +47,11 @@ public class Period {
         this.end_date = end_date;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void setTask(Task task) {
+        this.task = task;
     }
 }

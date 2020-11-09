@@ -10,6 +10,7 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import java.util.Map;
+import java.util.TreeSet;
 
 @ComponentScan
 @Service
@@ -29,7 +30,7 @@ public class MainMenuCommand implements ICommand, ICommandValidator, IHasNextCom
 
     @Override
     public SendMessage generateRequest(Long chatId) {
-        ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(menu.keySet());
+        ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(new TreeSet<>(menu.keySet()));
         var message = keyBoardService.createMessage(chatId, "Выбери пункт меню");
         message.setReplyMarkup(keyboard);
         return message;

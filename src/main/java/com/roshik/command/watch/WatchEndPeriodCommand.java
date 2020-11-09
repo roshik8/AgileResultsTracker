@@ -1,29 +1,19 @@
 package com.roshik.command.watch;
 
-import com.roshik.bot.AgileResultsBot;
 import com.roshik.command.ICommand;
 import com.roshik.command.ICommandValidator;
 import com.roshik.command.IHasNextCommand;
 import com.roshik.command.ValidationResult;
 import com.roshik.command.create.Storage;
-import com.roshik.domains.Task;
-import com.roshik.domains.TaskStatus;
 import com.roshik.services.FilterTaskQuery;
-import com.roshik.services.InlineKeyBoardService;
-import com.roshik.services.TaskService;
+import com.roshik.services.TasksByQuery;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @ComponentScan
 @Service
@@ -31,16 +21,12 @@ import java.util.stream.Collectors;
 public class WatchEndPeriodCommand implements ICommand, ICommandValidator, IHasNextCommand {
     private final Storage storage;
     private Long currentChatId;
-    private final TaskService taskService;
-    private final AgileResultsBot agileResultsBot;
-    private final InlineKeyBoardService inlineKeyBoardService;
+    private final TasksByQuery tasksByQuery;
     private Class<?> NextCommandHandlerName;
 
-    public WatchEndPeriodCommand(Storage storage, TaskService taskService, AgileResultsBot agileResultsBot, InlineKeyBoardService inlineKeyBoardService) {
+    public WatchEndPeriodCommand(Storage storage, TasksByQuery tasksByQuery) {
         this.storage = storage;
-        this.taskService = taskService;
-        this.agileResultsBot = agileResultsBot;
-        this.inlineKeyBoardService = inlineKeyBoardService;
+        this.tasksByQuery = tasksByQuery;
     }
 
 
@@ -58,43 +44,10 @@ public class WatchEndPeriodCommand implements ICommand, ICommandValidator, IHasN
         var selectTaskQuery = (FilterTaskQuery) storage.getTempObject(currentChatId);
         selectTaskQuery.setEnd_date(message);
         storage.saveTempObject(currentChatId, selectTaskQuery);
-        var taskLists = taskService.getTasksByFilterTaskQuery(selectTaskQuery, currentChatId);
-
-        if (selectTaskQuery.isOwnTasks()) {
-            var sendMessage = inlineKeyBoardService.createMessage(currentChatId, "Твои задачи");
-            var canClose = selectTaskQuery.getStatus() == TaskStatus.Created;
-            if(canClose)
-                NextCommandHandlerName=EditTaskCommand.class;
-            InlineKeyboardMarkup replyMarkup = taskToInlineKeyboard(taskLists, canClose);
-            storage.saveTempObject(currentChatId, replyMarkup);
-            sendMessage.setReplyMarkup(replyMarkup);
-            agileResultsBot.sendNewMessage(sendMessage);
-        } else {
-            Map<Long, List<Task>> tasksByUsers = taskLists.stream()
-                    .collect(Collectors.groupingBy(Task::getUser_id));
-            for (var tasks : tasksByUsers.entrySet()) {
-                var userLink = agileResultsBot.getUserLink(tasks.getKey());
-                var sendMessage = inlineKeyBoardService.createMessage(currentChatId, userLink);
-                sendMessage.enableHtml(true);
-                InlineKeyboardMarkup replyMarkup = taskToInlineKeyboard(tasks.getValue(), false);
-                storage.saveTempObject(currentChatId, replyMarkup);
-                sendMessage.setReplyMarkup(replyMarkup);
-                agileResultsBot.sendNewMessage(sendMessage);
-            }
-        }
+        tasksByQuery.sendTasksByQuery(selectTaskQuery,currentChatId);
+        NextCommandHandlerName=tasksByQuery.getNextCommandHandlerName();
     }
 
-    private InlineKeyboardMarkup taskToInlineKeyboard(List<Task> tasks, boolean canClose) {
-        ArrayList<Map<String, String>> rows = new ArrayList<>();
-        for (var task : tasks) {
-            Map<String, String> buttons = new HashMap<>();
-            buttons.put(task.getName() + System.lineSeparator() +  " до " + task.getPeriod().getStringEnd_date(), "-");
-            if (canClose)
-                buttons.put("✅️", task.getId().toString());
-            rows.add(buttons);
-        }
-        return inlineKeyBoardService.getKeyboard(rows);
-    }
 
     @Override
     public ValidationResult validateMessage(String message, Long chatId) {

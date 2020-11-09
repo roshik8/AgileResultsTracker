@@ -49,6 +49,11 @@ public class SetPermissionTaskCommand implements ICommand, ICommandValidator {
         permission.setPermission_owner((long) contact.getUserID());
         permissionService.add(permission);
         agileResultsBot.sendMessage(currentChatId,"Права на просмотр предоставлены");
+        var textMessage = "Вам дали доступ на просмотр задачи "+task.getName()+", пользователь "+agileResultsBot.getUserLink(task.getUser_id());
+        var permissionMessage = new SendMessage().setChatId((long) contact.getUserID())
+                .setText(textMessage)
+                .enableHtml(true);
+        agileResultsBot.sendNewMessage(permissionMessage);
 
     }
 

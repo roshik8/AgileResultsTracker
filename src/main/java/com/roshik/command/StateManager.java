@@ -19,36 +19,39 @@ public class StateManager {
     @Autowired
     Storage storage;
 
+    private final static String CANCEL_COMMAND =  "/cancel";
+
     private HashMap<Long, ICommand> userCommandCache = new HashMap<>();
 
     public SendMessage handleUpdate(Long chatId, Integer messageId, String message) {
         ICommand nextCommand = null;
+        if (!message.equals(CANCEL_COMMAND) && userCommandCache.containsKey(chatId)) {
+                var currentCommand = userCommandCache.get(chatId);
+                if (currentCommand instanceof ICommandValidator) {
 
-        if (userCommandCache.containsKey(chatId)) {
-            var currentCommand = userCommandCache.get(chatId);
-            if (currentCommand instanceof ICommandValidator) {
-                var validationResult = ((ICommandValidator) currentCommand).validateMessage(message,chatId);
-                if (!validationResult.IsSuccess) {
-                    SendMessage sendMessage = new SendMessage()
-                            .setChatId(chatId)
-                            .setText(validationResult.ValidationError);
-                    return sendMessage;
+                    var validationResult = ((ICommandValidator) currentCommand).validateMessage(message, chatId);
+                    if (!validationResult.IsSuccess) {
+                        SendMessage sendMessage = new SendMessage()
+                                .setChatId(chatId)
+                                .setText(validationResult.ValidationError);
+                        return sendMessage;
+                    }
+                }
+
+                currentCommand.handleResponse(message);
+
+                if (currentCommand instanceof IHasCallbackAnswer) {
+                    ((IHasCallbackAnswer) currentCommand).editCallback(messageId);
+                }
+
+                if (currentCommand instanceof IHasNextCommand) {
+                    var nextCommandName = ((IHasNextCommand) currentCommand).getNextCommandName();
+
+                    if (nextCommandName != null)
+                        nextCommand = (ICommand) beanFactory.getBean(nextCommandName);
                 }
             }
 
-            currentCommand.handleResponse(message);
-
-            if(currentCommand instanceof IHasCallbackAnswer){
-                ((IHasCallbackAnswer) currentCommand).editCallback(messageId);
-            }
-
-            if (currentCommand instanceof IHasNextCommand) {
-                var nextCommandName = ((IHasNextCommand) currentCommand).getNextCommandName();
-
-                if (nextCommandName != null)
-                    nextCommand = (ICommand) beanFactory.getBean(nextCommandName);
-            }
-        }
 
         if (nextCommand == null) {
             nextCommand = beanFactory.getBean(MainMenuCommand.class);
@@ -60,4 +63,5 @@ public class StateManager {
         var outMessage = nextCommand.generateRequest(chatId);
         return outMessage;
     }
+
 }

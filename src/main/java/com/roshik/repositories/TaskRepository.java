@@ -27,5 +27,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("select t.task from Permission t where t.permission_owner=?1 and t.task.status = ?2 ")
     List<Task> findByUser_idAndStatusAndPermissions(Long user_id, TaskStatus taskStatus);
 
+    @Query("select t from Task t where t.status='Created' and t.period.end_date<current_date")
+    List<Task> findByExpiredPeriod();
+
 
 }

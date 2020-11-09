@@ -13,7 +13,7 @@ public class Permission {
     private Long permission_owner;
 
     @ManyToOne
-    @JoinColumn(name = "data_owner",nullable = false)
+    @JoinColumn(name = "task_id",nullable = false)
     private Task task;
 
     public Permission(){

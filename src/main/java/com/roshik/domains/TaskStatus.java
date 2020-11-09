@@ -3,7 +3,7 @@ package com.roshik.domains;
 public enum TaskStatus {
 
     Created("Создана"),
-    Overdue("Просрочена"),
+    Expired("Просрочена"),
     Done("Выполнена");
 
     private String title;

@@ -13,6 +13,7 @@ import java.util.Set;
 @Service
 public class KeyBoardService {
     public ReplyKeyboardMarkup getKeyboard(Set<String> textButtons) {
+        textButtons.stream().sorted();
         var replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
@@ -21,7 +22,6 @@ public class KeyBoardService {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         for (var text : textButtons) {
-            //todo порядок кнопок иногда не правильный
             KeyboardRow row = new KeyboardRow();
             row.add(new KeyboardButton(text));
             keyboard.add(row);

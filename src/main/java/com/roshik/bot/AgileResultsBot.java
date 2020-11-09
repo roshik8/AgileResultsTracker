@@ -93,7 +93,7 @@ public class AgileResultsBot extends TelegramWebhookBot {
             String name = chatMember.getUser().getFirstName() + " " + chatMember.getUser().getLastName();
             if (!name.trim().isEmpty())
                 name = chatMember.getUser().getUserName();
-            var result = "<a href=\"tg://user?id=" + userId + "\">" + name + "</a>";
+            var result = "<a href=\"tg://user?id=" + userId + "\">" + (name==null?userId.toString():name) + "</a>";
             return result;
         } catch (TelegramApiException e) {
             e.printStackTrace();
