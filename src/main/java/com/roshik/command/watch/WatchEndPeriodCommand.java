@@ -29,7 +29,6 @@ public class WatchEndPeriodCommand implements ICommand, ICommandValidator, IHasN
         this.tasksByQuery = tasksByQuery;
     }
 
-
     @Override
     public SendMessage generateRequest(Long chatId) {
         currentChatId = chatId;

@@ -3,6 +3,7 @@ package com.roshik.services;
 import com.roshik.bot.AgileResultsBot;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +27,10 @@ public class NotifierProcessService {
         var tasks = taskService.updateExpiredTask();
 
         for(var task: tasks){
-            agileResultsBot.sendMessage(task.getUser_id(),"Задача "+task.getName()+" просрочена");
+            var sendMessage = new SendMessage().setChatId(task.getUser_id())
+                    .setText("Задача <b>"+task.getName()+"</b> просрочена")
+                    .enableHtml(true);
+            agileResultsBot.sendNewMessage(sendMessage);
         }
 
     }

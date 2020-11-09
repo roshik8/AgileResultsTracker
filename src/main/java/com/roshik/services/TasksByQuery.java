@@ -4,6 +4,7 @@ import com.roshik.bot.AgileResultsBot;
 import com.roshik.command.watch.EditTaskCommand;
 import com.roshik.domains.Task;
 import com.roshik.domains.TaskStatus;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Scope(value = "prototype")
 public class TasksByQuery {
 
     private final TaskService taskService;

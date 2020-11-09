@@ -30,7 +30,6 @@ public class TelegramFacade {
             message = update.getMessage();
             text = message.getText();
         } else {
-            // todo обработать непонятные сообщения
             return null;
         }
 
