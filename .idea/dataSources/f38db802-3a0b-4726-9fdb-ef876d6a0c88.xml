@@ -983,7 +983,6 @@ SELECT|sys.sys_config:null
     <column id="300" parent="285" name="period_id">
       <Position>5</Position>
       <DataType>int|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <index id="301" parent="285" name="FK66qxkqjqd3o73ctvd6783rkko">
       <ColNames>period_id</ColNames>

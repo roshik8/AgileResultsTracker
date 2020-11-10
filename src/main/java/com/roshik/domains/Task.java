@@ -18,8 +18,8 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @OneToOne
-    @JoinColumn(name = "period_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "period_id", referencedColumnName = "Id")
     private Period period;
 
     @OneToMany(mappedBy = "Id")

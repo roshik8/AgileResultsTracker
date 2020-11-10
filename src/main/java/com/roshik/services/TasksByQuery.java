@@ -1,7 +1,7 @@
 package com.roshik.services;
 
 import com.roshik.bot.AgileResultsBot;
-import com.roshik.command.watch.EditTaskCommand;
+import com.roshik.command.EditTaskCommand;
 import com.roshik.domains.Task;
 import com.roshik.domains.TaskStatus;
 import org.springframework.context.annotation.Scope;

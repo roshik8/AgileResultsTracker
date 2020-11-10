@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.roshik.bot.AgileResultsBot;
 import com.roshik.command.ICommand;
 import com.roshik.command.ICommandValidator;
+import com.roshik.command.Storage;
 import com.roshik.command.ValidationResult;
 import com.roshik.domains.Permission;
 import com.roshik.domains.Task;
@@ -63,7 +64,12 @@ public class SetPermissionTaskCommand implements ICommand, ICommandValidator {
         Gson gson = new Gson();
         try{
             Contact contact = gson.fromJson(message, Contact.class);
-            result.IsSuccess = true;
+           if (contact.getUserID()!=null)
+                result.IsSuccess = true;
+           else{
+               result.IsSuccess = false;
+               result.ValidationError = "Выбери контакт с одним номером телефона, на который зарегестрирован телеграмм";
+           }
         }
         catch (Exception e){
             result.IsSuccess = false;

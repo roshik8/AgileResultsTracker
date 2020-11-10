@@ -1,9 +1,6 @@
-package com.roshik.command.watch;
+package com.roshik.command;
 
 import com.roshik.bot.AgileResultsBot;
-import com.roshik.command.*;
-import com.roshik.command.create.Storage;
-import com.roshik.domains.Task;
 import com.roshik.domains.TaskStatus;
 import com.roshik.services.KeyBoardService;
 import com.roshik.services.TaskService;
@@ -12,7 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import java.util.Map;

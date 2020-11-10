@@ -1,4 +1,4 @@
-package com.roshik.command.create;
+package com.roshik.command;
 
 import org.springframework.stereotype.Component;
 

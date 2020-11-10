@@ -47,10 +47,9 @@ public class TelegramFacade {
             var outMessage = stateManager.handleUpdate(chatId, messageId, text);
             return outMessage;
         } catch (Exception e) {
-            //todo удалить перед продом
             SendMessage sendMessage = new SendMessage()
                     .setChatId(chatId)
-                    .setText(e.getMessage());
+                    .setText("Не понимаю, отправь команду");
             return sendMessage;
         }
     }

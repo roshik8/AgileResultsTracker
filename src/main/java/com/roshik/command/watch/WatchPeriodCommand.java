@@ -1,7 +1,7 @@
 package com.roshik.command.watch;
 
 import com.roshik.command.*;
-import com.roshik.command.create.Storage;
+import com.roshik.command.Storage;
 import com.roshik.services.*;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
