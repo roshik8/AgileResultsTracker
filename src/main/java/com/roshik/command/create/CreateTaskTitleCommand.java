@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 
+import java.util.regex.Pattern;
+
 @ComponentScan
 @Service
 @Scope(value = "prototype")
@@ -49,7 +51,12 @@ public class CreateTaskTitleCommand implements ICommand, ICommandValidator, IHas
         if (StringUtils.isEmpty(message)) {
             result.IsSuccess = false;
             result.ValidationError = "Название не может быть пустым";
-        } else {
+        }
+        else if(!message.matches("[\\p{L}\\p{M}\\p{N}\\p{P}\\p{Z}\\p{Cf}\\p{Cs}\\s]*")){
+            result.IsSuccess = false;
+            result.ValidationError = "В названии могут быть только буквы";
+        }
+        else {
             result.IsSuccess = true;
         }
         return result;
