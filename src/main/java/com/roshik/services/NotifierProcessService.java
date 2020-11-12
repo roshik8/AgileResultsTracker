@@ -21,7 +21,7 @@ public class NotifierProcessService {
         this.agileResultsBot = agileResultsBot;
     }
 
-    @Scheduled(fixedRateString = "${notifier.processPeriod}")
+    @Scheduled(cron = "${notifier.processPeriod}")
     public void closeOverdueTasks() {
         System.out.println("Проверка задач");
         var tasks = taskService.updateExpiredTask();
