@@ -49,10 +49,12 @@ public class FilterTaskQuery {
 
     public void setStart_date(String start_date){
 
-        this.start_date= LocalDate.parse(start_date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        this.start_date= LocalDate.parse(start_date,formatter);
     }
 
     public void setEnd_date(String end_date){
-        this.end_date= LocalDate.parse(end_date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        this.end_date= LocalDate.parse(end_date,formatter);
     }
 }
