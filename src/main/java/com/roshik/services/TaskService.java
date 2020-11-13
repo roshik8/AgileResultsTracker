@@ -22,7 +22,15 @@ public class TaskService {
     PermissionRepository permissionRepository;
 
     public void add(Task task) {
-        periodRepository.save(task.getPeriod());
+        var period = task.getPeriod();
+        var start_date = period.getStart_date();
+        var end_date = period.getEnd_date();
+        if(periodRepository.isExistsStart_dateAndEnd_date(start_date,end_date))
+        {
+            task.setPeriod(periodRepository.getPeriodByStart_dateAndEnd_date(start_date,end_date));
+        } else {
+            periodRepository.save(period);
+        }
         repository.save(task);
 
     }

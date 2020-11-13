@@ -12,7 +12,15 @@ import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.*;
+
+import static java.time.temporal.TemporalAdjusters.nextOrSame;
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
 @ComponentScan
 @Service
@@ -48,7 +56,7 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
     @Override
     public void handleResponse(String message) {
         var period = new Period();
-        period.setStart_date(new Date());
+        period.setStart_date(getStartDate(message));
         period.setEnd_date(getEndDate(message));
 
         var task = (Task) storage.getTempObject(currentChatId);
@@ -56,17 +64,26 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
         taskService.add(task);
     }
 
-    private Date getEndDate(String message) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
+    private LocalDate getStartDate(String message){
+        LocalDate todaydate = LocalDate.now();
         if (message.equalsIgnoreCase("День")) {
-            c.add(Calendar.DATE, 1);
+            return todaydate;
         } else if (message.equalsIgnoreCase("Месяц")) {
-            c.add(Calendar.DATE, 7);
+            return todaydate.withDayOfMonth(1);
         } else {
-            c.add(Calendar.MONTH, 1);
+            return todaydate.with(previousOrSame(DayOfWeek.MONDAY));
         }
-        return c.getTime();
+    }
+
+    private LocalDate getEndDate(String message) {
+        LocalDate todaydate = LocalDate.now();
+        if (message.equalsIgnoreCase("День")) {
+            return todaydate;
+        } else if (message.equalsIgnoreCase("Месяц")) {
+            return todaydate.withDayOfMonth(todaydate.lengthOfMonth());
+        } else {
+            return todaydate.with(nextOrSame(DayOfWeek.SUNDAY));
+        }
     }
 
     @Override

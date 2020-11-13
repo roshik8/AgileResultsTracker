@@ -49,7 +49,7 @@ public class TelegramFacade {
         } catch (Exception e) {
             SendMessage sendMessage = new SendMessage()
                     .setChatId(chatId)
-                    .setText("Не понимаю сообщение");
+                    .setText(e.getMessage());
             return sendMessage;
         }
     }

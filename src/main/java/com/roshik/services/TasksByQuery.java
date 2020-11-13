@@ -45,7 +45,7 @@ public class TasksByQuery {
                 NextCommandHandlerName = EditTaskCommand.class;
 
             for (var task : taskLists) {
-                var taskDescription = task.getName() + System.lineSeparator() +  " до " + task.getPeriod().getStringEnd_date();
+                var taskDescription = task.getName() + System.lineSeparator() +  " по " + task.getPeriod().getStringEnd_date();
                 sendMessage = new SendMessage()
                         .setChatId(chatId)
                         .setText(taskDescription);
@@ -76,7 +76,7 @@ public class TasksByQuery {
                 agileResultsBot.sendNewMessage(sendMessage);
                 var builder = new StringBuilder();
                 for (var task : tasks.getValue()) {
-                    builder.append(task.getName()).append(" до ").append(task.getPeriod().getStringEnd_date()).append(System.lineSeparator());
+                    builder.append(task.getName()).append(" по ").append(task.getPeriod().getStringEnd_date()).append(System.lineSeparator());
                 }
                 sendMessage = new SendMessage()
                         .setChatId(chatId)
