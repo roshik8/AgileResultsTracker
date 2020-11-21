@@ -45,7 +45,7 @@ public class TasksByQuery {
                 NextCommandHandlerName = EditTaskCommand.class;
 
             for (var task : taskLists) {
-                var taskDescription = task.getName() + System.lineSeparator() +  " по " + task.getPeriod().getStringEnd_date();
+                var taskDescription = "<b>"+task.getHotSpots().getTitle()+":</b> "+task.getName() + System.lineSeparator() +  " по " + task.getPeriod().getStringEnd_date();
                 sendMessage = new SendMessage()
                         .setChatId(chatId)
                         .setText(taskDescription);
@@ -60,7 +60,7 @@ public class TasksByQuery {
                     rowList.add(row);
                     inlineKeyboardMarkup.setKeyboard(rowList);
 
-                    sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+                    sendMessage.enableHtml(true).setReplyMarkup(inlineKeyboardMarkup);
                 }
                 agileResultsBot.sendNewMessage(sendMessage);
             }
@@ -76,10 +76,11 @@ public class TasksByQuery {
                 agileResultsBot.sendNewMessage(sendMessage);
                 var builder = new StringBuilder();
                 for (var task : tasks.getValue()) {
-                    builder.append(task.getName()).append(" по ").append(task.getPeriod().getStringEnd_date()).append(System.lineSeparator());
+                    builder.append("<b>"+task.getHotSpots().getTitle()+":</b> "+task.getName()).append(" по ").append(task.getPeriod().getStringEnd_date()).append(System.lineSeparator());
                 }
                 sendMessage = new SendMessage()
                         .setChatId(chatId)
+                        .enableHtml(true)
                         .setText(builder.toString());
                 agileResultsBot.sendNewMessage(sendMessage);
             }

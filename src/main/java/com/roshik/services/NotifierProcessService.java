@@ -1,12 +1,12 @@
 package com.roshik.services;
 
 import com.roshik.bot.AgileResultsBot;
+import com.roshik.repositories.TaskRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 @Service
@@ -28,12 +28,36 @@ public class NotifierProcessService {
 
         for(var task: tasks){
             var sendMessage = new SendMessage().setChatId(task.getUser_id())
-                    .setText("Задача <b>"+task.getName()+"</b> просрочена")
+                    .setText("Задача <b> "+task.getHotSpots().getTitle()+": "+task.getName()+"</b> просрочена")
                     .enableHtml(true);
             agileResultsBot.sendNewMessage(sendMessage);
         }
 
     }
 
+    @Scheduled(cron = "${notifier.fridayReport}")
+    public void sendFridayReport() {
+        System.out.println("Пятничный отчет");
+        var users = taskService.getTasksUserId();
+
+        for(var us: users){
+            var sendMessage = new SendMessage().setChatId(us)
+                    .setText("Проведи пятничный обзор по задачам :)")
+                    .enableHtml(true);
+            agileResultsBot.sendNewMessage(sendMessage);
+        }
+    }
+
+    @Scheduled(cron = "${notifier.mondayNotice}")
+    public void sendMondayNotice() {
+        var users = taskService.getTasksUserId();
+
+        for(var us: users){
+            var sendMessage = new SendMessage().setChatId(us)
+                    .setText("Заведи задачи на неделю :)")
+                    .enableHtml(true);
+            agileResultsBot.sendNewMessage(sendMessage);
+        }
+    }
 
 }

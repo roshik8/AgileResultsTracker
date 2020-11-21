@@ -81,6 +81,13 @@ public class TaskService {
         return tasks;
     }
 
+    public List<Long> getTasksUserId(){
+        return repository.findDistictUserId();
+    }
+
+
+
+
 }
 
 

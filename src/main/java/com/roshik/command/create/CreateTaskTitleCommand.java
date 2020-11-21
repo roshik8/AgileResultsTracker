@@ -41,7 +41,6 @@ public class CreateTaskTitleCommand implements ICommand, ICommandValidator, IHas
         task.setStatus(TaskStatus.Created);
         task.setName(message);
         task.setUser_id(currentChatId);
-
         storage.saveTempObject(currentChatId, task);
     }
 
@@ -54,7 +53,7 @@ public class CreateTaskTitleCommand implements ICommand, ICommandValidator, IHas
         }
         else if(!message.matches("[\\p{L}\\p{M}\\p{N}\\p{P}\\p{Z}\\p{Cf}\\p{Cs}\\s]*")){
             result.IsSuccess = false;
-            result.ValidationError = "В названии могут быть только буквы";
+            result.ValidationError = "В названии могут быть только буквы, цифры и символы";
         }
         else {
             result.IsSuccess = true;
@@ -64,6 +63,6 @@ public class CreateTaskTitleCommand implements ICommand, ICommandValidator, IHas
 
     @Override
     public Class<?> getNextCommandName() {
-        return CreateTaskPeriodCommand.class;
+        return CreateTaskHotSpotsCommand.class;
     }
 }

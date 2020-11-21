@@ -1,5 +1,6 @@
 package com.roshik.repositories;
 
+import com.roshik.domains.Period;
 import com.roshik.domains.Task;
 import com.roshik.domains.TaskStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,6 +30,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("select t from Task t where t.status='Created' and t.period.end_date<current_date")
     List<Task> findByExpiredPeriod();
+
+    List<Task> findAllByPeriod(Period period);
+
+    @Query("select DISTINCT(t.user_id) from Task t")
+    List<Long> findDistictUserId();
 
 
 }

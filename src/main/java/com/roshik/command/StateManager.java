@@ -19,12 +19,13 @@ public class StateManager {
     Storage storage;
 
     private final static String CANCEL_COMMAND =  "/cancel";
+    private final static String START_COMMAND =  "/start";
 
     private HashMap<Long, ICommand> userCommandCache = new HashMap<>();
 
     public SendMessage handleUpdate(Long chatId, Integer messageId, String message) {
         ICommand nextCommand = null;
-        if (!message.equals(CANCEL_COMMAND) && userCommandCache.containsKey(chatId)) {
+        if (!message.equals(CANCEL_COMMAND) &&!message.equals(START_COMMAND) && userCommandCache.containsKey(chatId)) {
                 var currentCommand = userCommandCache.get(chatId);
                 if (currentCommand instanceof ICommandValidator) {
 

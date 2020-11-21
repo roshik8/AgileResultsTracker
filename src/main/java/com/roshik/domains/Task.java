@@ -16,6 +16,9 @@ public class Task {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    private HotSpots hotSpots;
+
+    @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
     @ManyToOne
@@ -72,6 +75,12 @@ public class Task {
         this.user_id = user_id;
     }
 
+    public HotSpots getHotSpots() {
+        return hotSpots;
+    }
 
+    public void setHotSpots(HotSpots hotSpots) {
+        this.hotSpots = hotSpots;
+    }
 }
 

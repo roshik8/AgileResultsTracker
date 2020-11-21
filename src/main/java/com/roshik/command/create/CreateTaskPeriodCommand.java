@@ -32,10 +32,11 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
     private final TaskService taskService;
     private Long currentChatId;
 
-    private final Map<String, Class<?>> menu = Map.of(
-            "День", Object.class,
-            "Неделя", Object.class,
-            "Месяц", Object.class
+    private final Set<String> menu = Set.of(
+            "День",
+            "Неделя",
+            "Месяц",
+            "Год"
     );
 
     public CreateTaskPeriodCommand(Storage storage, KeyBoardService keyBoardService, TaskService taskService) {
@@ -47,7 +48,7 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
     @Override
     public SendMessage generateRequest(Long chatId) {
         currentChatId = chatId;
-        ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(new TreeSet<>(menu.keySet()));
+        ReplyKeyboardMarkup keyboard = keyBoardService.getKeyboard(new TreeSet<>(menu));
         var message = keyBoardService.createMessage(chatId, "Выбери период");
         message.setReplyMarkup(keyboard);
         return message;
@@ -70,7 +71,11 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
             return todaydate;
         } else if (message.equalsIgnoreCase("Месяц")) {
             return todaydate.withDayOfMonth(1);
-        } else {
+
+       } else if (message.equalsIgnoreCase("Год")) {
+        return todaydate.withDayOfYear(1);
+       }
+        else {
             return todaydate.with(previousOrSame(DayOfWeek.MONDAY));
         }
     }
@@ -81,7 +86,10 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
             return todaydate;
         } else if (message.equalsIgnoreCase("Месяц")) {
             return todaydate.withDayOfMonth(todaydate.lengthOfMonth());
-        } else {
+        } else if (message.equalsIgnoreCase("Год")) {
+            return todaydate.withDayOfYear(todaydate.lengthOfYear());
+        }
+        else {
             return todaydate.with(nextOrSame(DayOfWeek.SUNDAY));
         }
     }
@@ -93,7 +101,7 @@ public class CreateTaskPeriodCommand implements ICommand, ICommandValidator, IHa
             result.IsSuccess = false;
             result.ValidationError = "Период не может быть пустым";
         }
-        else if (!menu.containsKey(message)){
+        else if (!menu.contains(message)){
             result.IsSuccess = false;
             result.ValidationError = "Выбери период из списка";
         }
