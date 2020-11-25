@@ -48,6 +48,7 @@ public class TasksByQuery {
                 var taskDescription = "<b>"+task.getHotSpots().getTitle()+":</b> "+task.getName() + System.lineSeparator() +  " по " + task.getPeriod().getStringEnd_date();
                 sendMessage = new SendMessage()
                         .setChatId(chatId)
+                        .enableHtml(true)
                         .setText(taskDescription);
                 if(canClose) {
                     var inlineKeyboardMarkup = new InlineKeyboardMarkup();
